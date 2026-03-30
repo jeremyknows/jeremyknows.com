@@ -55,18 +55,24 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 58px 32px 10px;
+      padding: 0;
       pointer-events: none;
-      /* Frosted solid bg — no more text bleeding through */
       background: var(--bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--rule);
       transition: background var(--speed) ease, border-color var(--speed) ease;
     }
 
-    .mode-toggle {
+    .mode-inner {
       pointer-events: all;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 32px 10px;
+      width: 100%;
+    }
+
+    .mode-toggle {
       display: flex;
       align-items: center;
       background: var(--faint);
@@ -105,25 +111,16 @@
     .wrap {
       max-width: 700px;
       margin: 0 auto;
-      padding: 120px 48px 80px;
+      padding: 136px 48px 80px;
     }
 
-    /* ── APEX LOGO (above toggle) ── */
-    .apex-logo {
-      position: fixed;
-      top: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 300;
-      padding-bottom: 12px;
-    }
-
+    /* ── APEX LOGO (inside mode-bar) ── */
     .apex-img {
-      width: 64px;
-      height: 64px;
+      width: 48px;
+      height: 48px;
       border-radius: 6px;
       display: block;
-      transition: filter var(--speed) ease, opacity 0.15s ease;
+      transition: filter var(--speed) ease, opacity 0.15s ease, transform 0.1s ease;
     }
 
     .apex-img:hover { opacity: 0.75; }
@@ -138,7 +135,7 @@
       display: block;
       text-align: center;
       margin-bottom: 64px;
-      padding-top: 16px;
+      padding-top: 0;
     }
 
     .name-col {}
@@ -449,27 +446,58 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 580px) {
-      .wrap { padding: 88px 24px 60px; }
-      footer { padding: 28px 24px; }
-      header { grid-template-columns: 1fr; gap: 20px 0; }
-      .logo-img { width: 64px; height: 64px; }
-      .row { grid-template-columns: 1fr; gap: 6px 0; }
-      .cards-2col { grid-template-columns: 1fr; }
+      /* Layout */
+      .wrap { padding: 148px 20px 60px; }
+      footer { padding: 28px 20px; }
+
+      /* Header */
+      header { padding-top: 0; margin-bottom: 48px; }
+
+      /* Rows: stack label above body */
+      .row {
+        grid-template-columns: 1fr;
+        gap: 6px 0;
+        padding: 24px 0;
+      }
+
+      /* Cards: single column on mobile */
+      .cards-2col {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      /* Card images taller in single col */
+      .card-img-link img { height: 160px; }
+
+      /* Toggle sizing on mobile */
+      .mode-inner { padding: 10px 20px 8px; gap: 6px; }
+      .apex-img { width: 40px; height: 40px; }
+      .mode-btn { padding: 6px 14px; font-size: 11px; }
+
+      /* Name sizing */
+      body.pro .site-name { font-size: clamp(44px, 12vw, 72px); }
+      body.personal .site-name { font-size: clamp(36px, 9vw, 56px); }
+
+      /* Body text */
+      .row-body p { font-size: 15px; }
+
+      /* Link pills wrap nicely */
+      .link-pills { gap: 6px; }
+      .link-pill { padding: 6px 14px; font-size: 12px; }
     }
   </style>
 </head>
 <body class="pro">
 
-  <div class="apex-logo">
-    <img class="apex-img"
-      src="assets/jeremyknows-logomark-v1.png"
-      alt="jeremyknows hat logomark">
-  </div>
-
   <div class="mode-bar">
-    <div class="mode-toggle">
-      <button class="mode-btn active" id="btn-pro" onclick="setMode('pro')">Professional</button>
-      <button class="mode-btn" id="btn-personal" onclick="setMode('personal')">Personal</button>
+    <div class="mode-inner">
+      <img class="apex-img"
+        src="assets/jeremyknows-logomark-v1.png"
+        alt="jeremyknows hat logomark">
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btn-pro" onclick="setMode('pro')">Professional</button>
+        <button class="mode-btn" id="btn-personal" onclick="setMode('personal')">Personal</button>
+      </div>
     </div>
   </div>
 
