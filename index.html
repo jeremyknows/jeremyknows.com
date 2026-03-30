@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeremy Knows</title>
+  <meta name="description" content="Know enough to be dangerous. Community Success Analyst at VeeFriends.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=Caveat:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root { --speed: 0.35s; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background var(--speed) ease, color var(--speed) ease;
+      min-height: 100vh;
+    }
+
+    body.pro {
+      --bg:       #0D0D0D;
+      --surface:  #141414;
+      --text:     #F5F5F0;
+      --muted:    rgba(245,245,240,0.45);
+      --faint:    rgba(245,245,240,0.12);
+      --rule:     rgba(245,245,240,0.08);
+      --red:      #E8233A;
+      --red-dim:  rgba(232,35,58,0.1);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body.personal {
+      --bg:       #F5F5F0;
+      --surface:  #EAEAD8;
+      --text:     #18140E;
+      --muted:    rgba(24,20,14,0.45);
+      --faint:    rgba(24,20,14,0.1);
+      --rule:     rgba(24,20,14,0.1);
+      --red:      #E8233A;
+      --red-dim:  rgba(232,35,58,0.08);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ── MODE TOGGLE ── */
+    .mode-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 32px 18px;
+      pointer-events: none;
+    }
+
+    .mode-toggle {
+      pointer-events: all;
+      display: flex;
+      align-items: center;
+      background: var(--faint);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 3px;
+      gap: 2px;
+      transition: background var(--speed) ease, border-color var(--speed) ease;
+    }
+
+    .mode-btn {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 4px;
+      color: var(--muted);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .mode-btn.active {
+      background: var(--red);
+      color: #F5F5F0;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .wrap {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 120px 48px 80px;
+    }
+
+    /* ── APEX LOGO (above toggle) ── */
+    .apex-logo {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+    }
+
+    .apex-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 6px;
+      display: block;
+      transition: filter var(--speed) ease, opacity 0.15s ease;
+    }
+
+    .apex-img:hover { opacity: 0.75; }
+
+    body.personal .apex-img {
+      filter: sepia(0.2) saturate(0.9);
+    }
+
+    /* ── HEADER ── */
+    header {
+      display: block;
+      text-align: center;
+      margin-bottom: 64px;
+      padding-top: 40px;
+    }
+
+    .name-col {}
+
+    /* Pro name */
+    body.pro .site-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 9vw, 88px);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    body.pro .site-name em {
+      font-style: normal;
+      color: var(--red);
+    }
+
+    /* Personal name */
+    body.personal .site-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(42px, 7vw, 68px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.05;
+      color: var(--text);
+    }
+
+    .site-tagline {
+      margin-top: 14px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--muted);
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+      transition: color var(--speed) ease;
+    }
+
+    /* ── CONTENT ROWS ── */
+    .row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0 48px;
+      padding: 32px 0;
+      border-top: 1px solid var(--rule);
+      align-items: start;
+      transition: border-color var(--speed) ease;
+    }
+
+    .row-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      padding-top: 2px;
+      transition: color var(--speed) ease;
+    }
+
+    body.personal .row-label {
+      font-family: 'Caveat', cursive;
+      font-size: 16px;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .row-body {}
+
+    .row-body p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 14px;
+      transition: color var(--speed) ease;
+    }
+
+    .row-body p:last-child { margin-bottom: 0; }
+
+    .row-body a {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--faint);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.15s ease, color 0.15s ease;
+    }
+    .row-body a:hover {
+      text-decoration-color: var(--red);
+      color: var(--red);
+    }
+
+    /* Inline CTA */
+    .row-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--red);
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+    .row-cta:hover { opacity: 0.7; }
+
+    /* ── THINGS BUILT, LARGE CARDS ── */
+    .build-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .build-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 20px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--rule);
+      text-decoration: none;
+      color: var(--text);
+      font-size: 16px;
+      transition: color 0.15s ease, border-color var(--speed) ease;
+    }
+
+    .build-item:first-child { border-top: 1px solid var(--rule); }
+
+    .build-item:hover .bi-name { color: var(--red); }
+
+    .bi-name {
+      font-weight: 500;
+      transition: color 0.15s ease;
+      flex: 1;
+    }
+
+    .bi-name .bi-desc {
+      display: block;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 2px;
+      transition: color var(--speed) ease;
+    }
+
+    .bi-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color var(--speed) ease;
+    }
+
+    /* ── FLAGSHIP CARDS (images) ── */
+    .cards-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .card-img-link {
+      display: block;
+      overflow: hidden;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .card-img-link img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      transition: filter 0.2s ease, transform 0.2s ease;
+      filter: brightness(0.85) saturate(0.9);
+    }
+
+    /* jeremyknows.md card — content is right-of-center, shift to show it */
+    .card-jkmd img {
+      object-position: right center;
+    }
+
+    .card-img-link:hover img {
+      filter: brightness(1) saturate(1);
+      transform: scale(1.02);
+    }
+
+    .card-img-label {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245,245,240,0.8);
+    }
+
+    /* ── LINKS ROW ── */
+    .link-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .link-pill {
+      display: inline-block;
+      padding: 7px 16px;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+    }
+
+    .link-pill:hover {
+      border-color: var(--red);
+      color: var(--red);
+      background: var(--red-dim);
+    }
+
+    .avail {
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 8px;
+      transition: color var(--speed) ease;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 32px 48px;
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--rule);
+      transition: border-color var(--speed) ease;
+    }
+
+    footer .f-credit {
+      font-family: 'Caveat', cursive;
+      font-size: 15px;
+      color: var(--muted);
+      transition: color var(--speed) ease;
+    }
+
+    footer .f-logo {
+      width: 28px;
+      height: 28px;
+      opacity: 0.4;
+      transition: opacity 0.15s ease;
+    }
+
+    footer .f-logo:hover { opacity: 0.8; }
+
+    /* ── SHOW/HIDE ── */
+    .show-pro, .show-personal   { display: none !important; }
+    body.pro span.show-pro      { display: inline !important; }
+    body.pro div.show-pro       { display: block !important; }
+    body.personal span.show-personal { display: inline !important; }
+    body.personal div.show-personal  { display: block !important; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 580px) {
+      .wrap { padding: 88px 24px 60px; }
+      footer { padding: 28px 24px; }
+      header { grid-template-columns: 1fr; gap: 20px 0; }
+      .logo-img { width: 64px; height: 64px; }
+      .row { grid-template-columns: 1fr; gap: 6px 0; }
+      .cards-2col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="pro">
+
+  <div class="apex-logo">
+    <img class="apex-img"
+      src="jeremyknows-logomark-v1.png"
+      alt="jeremyknows hat logomark">
+  </div>
+
+  <div class="mode-bar">
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="btn-pro" onclick="setMode('pro')">Professional</button>
+      <button class="mode-btn" id="btn-personal" onclick="setMode('personal')">Personal</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- HEADER -->
+    <header>
+      <div class="name-col">
+        <span class="site-name show-pro">JEREMY <em>KNOWS</em></span>
+        <span class="site-name show-personal">Jeremy Knows</span>
+        <p class="site-tagline">
+          <span class="show-pro">Community Success Analyst · VeeFriends.<br>Know enough to be dangerous.</span>
+          <span class="show-personal">Actor. Clown. Teacher. Perpetually figuring it out.</span>
+        </p>
+      </div>
+    </header>
+
+    <!-- ─── PRO MODE ─── -->
+    <div class="show-pro">
+
+      <div class="row">
+        <span class="row-label">About</span>
+        <div class="row-body">
+          <p>I make complex things easy to understand for people. That's always been the job, as a teacher, as a community operator, as someone building AI systems that non-technical people can actually use.</p>
+          <p>Community Success Analyst at <a href="https://veefriends.com" target="_blank">VeeFriends</a> since 2023. Hosting livestreams, advising on Web3 strategy, leading community and concierge. Also building Watson, a multi-agent AI swarm running ops, memory, and decision routing across thousands of tasks. Not a demo.</p>
+          <a class="row-cta" href="https://vf.social/jk20" target="_blank" rel="noopener">Let's talk →</a>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="row-label">What I've built</span>
+        <div class="row-body">
+          <div class="build-list">
+            <a class="build-item" href="https://github.com/jeremyknows/openclaw" target="_blank" rel="noopener">
+              <span class="bi-name">Watson <span class="bi-desc">Multi-agent AI COO, event bus, memory, specialist agents, task routing. Production since late 2024.</span></span>
+              <span class="bi-tag">AI · Private</span>
+            </a>
+            <a class="build-item" href="https://github.com/jeremyknows/content-condor" target="_blank" rel="noopener">
+              <span class="bi-name">Content Condor <span class="bi-desc">Gamified content consistency for VeeFriends creators. Post → feed your condor → earn XP → evolve to mythic.</span></span>
+              <span class="bi-tag">VeeFriends · Beta</span>
+            </a>
+            <a class="build-item" href="https://github.com/jeremyknows/clawstarter" target="_blank" rel="noopener">
+              <span class="bi-name">ClawStarter <span class="bi-desc">curl | bash installer, zero to running AI agent on macOS/Linux. No dev background required.</span></span>
+              <span class="bi-tag">Open Source</span>
+            </a>
+          </div>
+          <div class="cards-2col" style="margin-top:16px;">
+            <a class="card-img-link" href="https://github.com/jeremyknows/PRISM" target="_blank" rel="noopener">
+              <img src="assets/cards/prism.jpg" alt="PRISM">
+              <span class="card-img-label">PRISM →</span>
+            </a>
+            <a class="card-img-link" href="https://github.com/jeremyknows/watson-toolkit" target="_blank" rel="noopener">
+              <img src="assets/cards/watson-toolkit.jpg" alt="Watson Toolkit">
+              <span class="card-img-label">Watson Toolkit →</span>
+            </a>
+            <a class="card-img-link card-jkmd" href="https://github.com/jeremyknows/jeremyknows.md" target="_blank" rel="noopener">
+              <img src="assets/cards/jeremyknows-md.jpg" alt="jeremyknows.md">
+              <span class="card-img-label">jeremyknows.md →</span>
+            </a>
+            <a class="card-img-link" href="https://github.com/jeremyknows/content-condor" target="_blank" rel="noopener">
+              <img src="assets/cards/content-condor.jpg" alt="Content Condor">
+              <span class="card-img-label">Content Condor →</span>
+            </a>
+          </div>
+          <a class="row-cta" href="https://github.com/jeremyknows" target="_blank" rel="noopener">See everything on GitHub, a ⭐ goes a long way →</a>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="row-label">Writing</span>
+        <div class="row-body">
+          <div class="build-list">
+            <a class="build-item" href="https://github.com/jeremyknows/watson-works" target="_blank" rel="noopener">
+              <span class="bi-name">Watson Works <span class="bi-desc">What agent infrastructure actually looks like. Field notes from production.</span></span>
+              <span class="bi-tag">Blog</span>
+            </a>
+            <a class="build-item" href="https://x.com/jeremyknows" target="_blank" rel="noopener">
+              <span class="bi-name">@jeremyknows <span class="bi-desc">Building in public, daily. What works, what breaks, what I'm figuring out.</span></span>
+              <span class="bi-tag">X / Twitter</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="row-label">Find me</span>
+        <div class="row-body">
+          <div class="link-pills">
+            <a class="link-pill" href="https://x.com/jeremyknows" target="_blank" rel="noopener">X @jeremyknows</a>
+            <a class="link-pill" href="https://github.com/jeremyknows" target="_blank" rel="noopener">GitHub</a>
+            <a class="link-pill" href="mailto:jeremy@veefriends.com">Email</a>
+            <a class="link-pill" href="https://vf.social/jk20" target="_blank" rel="noopener">Let's talk →</a>
+          </div>
+          <p class="avail">Full-time at VeeFriends. Open for advisory on AI ops, community infrastructure, and Web3.</p>
+        </div>
+      </div>
+
+    </div>
+    <!-- end pro -->
+
+    <!-- ─── PERSONAL MODE ─── -->
+    <div class="show-personal">
+
+      <div class="row">
+        <span class="row-label">Background</span>
+        <div class="row-body">
+          <p>I was an actor, then a clown, improviser, and puppeteer. Then a teacher and director. When Covid shut everything down in 2020, I pivoted, photography, handyman work to pay the bills in NYC.</p>
+          <p>In 2021, I found blockchain, crypto, and NFTs. Through rapid public experimentation and a refusal to quit, I built a following and landed my dream job. Different context, same skills.</p>
+          <p>Now I work at <a href="https://veefriends.com" target="_blank">VeeFriends</a>, Gary Vaynerchuk's IP and community platform, one of the most interesting experiments in what community means when it lives online. I've been here since mint in May 2021, and working full time since February 2023.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="row-label">What I love</span>
+        <div class="row-body">
+          <div class="build-list">
+            <div class="build-item" style="cursor:default;">
+              <span class="bi-name">Theater <span class="bi-desc">The training ground for everything. Improv especially, it's still how I think.</span></span>
+            </div>
+            <div class="build-item" style="cursor:default;">
+              <span class="bi-name">Teaching <span class="bi-desc">Still the operating system. All of this is just different classrooms.</span></span>
+            </div>
+            <a class="build-item" href="https://veefriends.com" target="_blank" rel="noopener">
+              <span class="bi-name">VeeFriends <span class="bi-desc">Home since mint. 283 characters, cards, comics, events, and more 🐈‍⬛</span></span>
+            </a>
+            <div class="build-item" style="cursor:default;">
+              <span class="bi-name">Building with AI <span class="bi-desc">What it finally feels like to make things again. The creativity is back.</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="row-label">On my mind</span>
+        <div class="row-body">
+          <div class="build-list">
+            <a class="build-item" href="https://x.com/jeremyknows" target="_blank" rel="noopener">
+              <span class="bi-name">@jeremyknows on X <span class="bi-desc">What I'm building, noticing, and figuring out. Mostly in real time.</span></span>
+            </a>
+            <a class="build-item" href="https://github.com/jeremyknows/watson-works" target="_blank" rel="noopener">
+              <span class="bi-name">Watson Works <span class="bi-desc">Field notes from building a real AI agent system. What it actually looks like.</span></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="row-label">Say hi</span>
+        <div class="row-body">
+          <div class="link-pills">
+            <a class="link-pill" href="https://x.com/jeremyknows" target="_blank" rel="noopener">X @jeremyknows</a>
+            <a class="link-pill" href="https://vf.social/jk20" target="_blank" rel="noopener">vf.social/jk20</a>
+            <a class="link-pill" href="mailto:jeremy@veefriends.com">Email</a>
+          </div>
+          <p class="avail">DMs open. Mostly talk about VeeFriends, agents, and whatever's interesting this week.</p>
+        </div>
+      </div>
+
+    </div>
+    <!-- end personal -->
+
+  </div>
+
+  <footer>
+    <span class="f-credit">Built by Jeremy, automated by Watson</span>
+    <img class="f-logo"
+      src="jeremyknows-logomark-v1.png"
+      alt="🎩">
+  </footer>
+
+  <script>
+    function setMode(m) {
+      document.body.className = m;
+      document.getElementById('btn-pro').classList.toggle('active', m === 'pro');
+      document.getElementById('btn-personal').classList.toggle('active', m === 'personal');
+      localStorage.setItem('jk-mode', m);
+    }
+    const saved = localStorage.getItem('jk-mode');
+    if (saved) setMode(saved);
+  </script>
+
+</body>
+</html>
