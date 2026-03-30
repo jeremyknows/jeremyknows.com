@@ -57,6 +57,12 @@
       align-items: center;
       padding: 58px 32px 10px;
       pointer-events: none;
+      /* Frosted solid bg — no more text bleeding through */
+      background: var(--bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+      transition: background var(--speed) ease, border-color var(--speed) ease;
     }
 
     .mode-toggle {
