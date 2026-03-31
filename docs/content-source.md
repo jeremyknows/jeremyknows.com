@@ -4,14 +4,17 @@
 This file explains where the copy, visuals, and rules for `jeremyknows.com` came from.
 
 ## Source documents
+### Source-of-truth map
+- `~/projects/jeremyknows-studio/SOURCE-OF-TRUTH.md`
+
 ### Strategy / voice
-- `~/.openclaw/agents/main/workspace/docs/knowledge/brand/jeremyknows-brand-identity-2026-03-28.md`
+- `~/projects/jeremyknows-studio/docs/strategy/jeremyknows-brand-identity-2026-03-28.md`
 
 ### Visual system
-- `~/.openclaw/agents/main/workspace/docs/knowledge/brand/jeremyknows-visual-identity-2026-03-28.md`
+- `~/projects/jeremyknows-studio/docs/visual/jeremyknows-visual-identity-2026-03-28.md`
 
 ### Final presentation PDF
-- `~/.openclaw/agents/main/workspace/docs/knowledge/brand/jeremyknows-brand-guide-v2.pdf`
+- `~/projects/jeremyknows-studio/exports/jeremyknows-brand-guide-v2.pdf`
 
 ### Build file used during iteration
 - `~/.openclaw/agents/main/workspace/docs/html/jeremyknows-site-v3.html`

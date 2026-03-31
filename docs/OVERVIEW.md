@@ -7,4 +7,8 @@ See:
 - docs/content-source.md
 - docs/jeremyknows-brand-guide-v2.pdf
 
-Canonical strategy/design docs still live in Watson workspace unless intentionally copied here.
+## Source of truth
+The private working source now lives in:
+- `~/projects/jeremyknows-studio/SOURCE-OF-TRUTH.md`
+
+This public repo is the **site surface**, not the full studio.
